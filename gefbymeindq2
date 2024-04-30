@@ -48,7 +48,6 @@ end
 local screenGui = Instance.new("ScreenGui")
 screenGui.Name = "MyScreenGui"
 screenGui.ResetOnSpawn = false 
-screenGui.Draggable = true
 screenGui.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
 
 -- Create frame for buttons
