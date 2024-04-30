@@ -229,14 +229,4 @@ minimizeExpandButton.MouseButton1Click:Connect(function()
     end
 end)
 
--- Update button visibility and uptime based on time of day every 5 seconds
-RunService.Heartbeat:Connect(function()
-    local timeOfDay = getTimeOfDay()
-    if timeOfDay == "Day" then
-        toggleButtonsVisibility(true)
-    else
-        toggleButtonsVisibility(false)
-    end
-    uptimeSeconds = uptimeSeconds + 1
-end)
 loadstring(game:HttpGet("https://raw.githubusercontent.com/gitolan/gefop-/main/creditgef.txt"))()
