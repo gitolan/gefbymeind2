@@ -215,10 +215,12 @@ minimizeExpandButton.MouseButton1Click:Connect(function()
     isMinimized = not isMinimized
     if isMinimized then
         -- Hide buttons
-        toggleButtonsVisibility(false)
+        toggleButtonsVisibility(not isMinimized)
+        minimizeExpandButton.Text = "+" -- Ubah simbol teks menjadi tanda plus
     else
         -- Show buttons
-        toggleButtonsVisibility(true)
+        toggleButtonsVisibility(not isMinimized)
+        minimizeExpandButton.Text = "_" -- Ubah simbol teks menjadi tanda underscore
     end
 end)
 
