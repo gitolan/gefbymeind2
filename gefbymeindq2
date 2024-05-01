@@ -20,8 +20,8 @@ local function buttonFadeEffect(button)
 end
 
 -- Create ScreenGui
-local screenGui = Instance.new("ScreenGui")
-screenGui.Name = "MyScreenGui"
+local screenGui = Instance.new("screenGui")
+screenGui.Name = "MyscreenGui"
 screenGui.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
 screenGui.ResetOnSpawn = false 
 
