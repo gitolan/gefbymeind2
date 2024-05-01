@@ -188,7 +188,7 @@ end)
 buttonFadeEffect(spawnButton)
 
 -- Function to toggle visibility of buttons
-local function toggleButtonsVisibility(visible)
+toggleButtonsVisibility(not isMinimized)
     workshopButton.Visible = visible
     towerButton.Visible = visible
     miniHouseButton.Visible = visible
