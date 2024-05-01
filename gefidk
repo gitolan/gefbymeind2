@@ -68,6 +68,20 @@ frame.BackgroundTransparency = 0.5
 frame.BackgroundColor3 = Color3.new(0, 0, 0)
 frame.Parent = screenGui
 
+-- ตั้งค่า ScreenGui
+ScreenGui.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
+ScreenGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+ScreenGui.ResetOnSpawn = false
+
+-- ตั้งค่า MainFrame
+MainFrame.Name = "MainFrame"
+MainFrame.Parent = ScreenGui
+MainFrame.BackgroundColor3 = Color3.fromHSV(tick() % 5 / 5, 1, 1) -- สีรุ้ง
+MainFrame.Position = UDim2.new(0, 20, 0, 20)
+MainFrame.Size = UDim2.new(0, 350, 0, 250)
+MainFrame.Active = true
+MainFrame.Draggable = true
+
 -- Create minimize/expand button
 local minimizeExpandButton = Instance.new("TextButton")
 minimizeExpandButton.Text = "_"
