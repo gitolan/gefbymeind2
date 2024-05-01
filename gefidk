@@ -81,7 +81,7 @@ buttonFadeEffect(minimizeExpandButton)
 local buttonSize = UDim2.new(0, 100, 0, 20)
 
 local teleportWorkshopButton = Instance.new("TextButton")
-teleportWorkshopButton.Text = "shop"
+teleportWorkshopButton.Text = "Workshop"
 teleportWorkshopButton.Size = buttonSize
 teleportWorkshopButton.Position = UDim2.new(0, 10, 0, 60)
 teleportWorkshopButton.Parent = MainFrame
