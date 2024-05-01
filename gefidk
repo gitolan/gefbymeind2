@@ -201,14 +201,13 @@ end)
 buttonFadeEffect(spawnButton)
 
 -- Function to toggle visibility of buttons
-toggleButtonsVisibility(not isMinimized)
+local function toggleButtonsVisibility(visible)
     workshopButton.Visible = visible
     towerButton.Visible = visible
     miniHouseButton.Visible = visible
     safePlaceButton.Visible = visible
     secondFloorHouseButton.Visible = visible
     shop1Button.Visible = visible
-    hospital3rdFloorButton.Visible = visible
     hospital1stFloorButton.Visible = visible
     waterTankButton.Visible = visible
     spawnButton.Visible = visible
@@ -225,14 +224,8 @@ local isMinimized = false
 
 -- Minimize/expand button click event
 minimizeExpandButton.MouseButton1Click:Connect(function()
-    isMinimize = not isMinimize
-    if isMinimize then
-        -- Hide buttons
-        toggleButtonsVisibility(not isMinimized)
-    else
-        -- Show buttons
-        toggleButtonsVisibility(not isMinimized)
-    end
+    isMinimized = not isMinimized
+    toggleButtonsVisibility(not isMinimized)
 end)
 
 -- Create uptime display
