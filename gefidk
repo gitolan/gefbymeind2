@@ -104,7 +104,7 @@ end)
 buttonFadeEffect(towerButton)
 
 local miniHouseButton = Instance.new("TextButton")
-miniHouseButton.Text = "Teleport to Mini House"
+miniHouseButton.Text = "tpMini House"
 miniHouseButton.Size = buttonSize
 miniHouseButton.Position = UDim2.new(0, 10, 0, 120)
 miniHouseButton.Parent = MainFrame
@@ -114,7 +114,7 @@ end)
 buttonFadeEffect(miniHouseButton)
 
 local safePlaceButton = Instance.new("TextButton")
-safePlaceButton.Text = "Teleport to Safe Place"
+safePlaceButton.Text = "tpSafe Place"
 safePlaceButton.Size = buttonSize
 safePlaceButton.Position = UDim2.new(0, 10, 0, 150)
 safePlaceButton.Parent = MainFrame
@@ -124,7 +124,7 @@ end)
 buttonFadeEffect(safePlaceButton)
 
 local secondFloorHouseButton = Instance.new("TextButton")
-secondFloorHouseButton.Text = "Teleport to 2nd Floor House"
+secondFloorHouseButton.Text = "tp2nd Floor House"
 secondFloorHouseButton.Size = buttonSize
 secondFloorHouseButton.Position = UDim2.new(0, 180, 0, 60)
 secondFloorHouseButton.Parent = MainFrame
@@ -134,7 +134,7 @@ end)
 buttonFadeEffect(secondFloorHouseButton)
 
 local shop1Button = Instance.new("TextButton")
-shop1Button.Text = "Teleport to Shop 1"
+shop1Button.Text = "tpShop 1"
 shop1Button.Size = buttonSize
 shop1Button.Position = UDim2.new(0, 180, 0, 90)
 shop1Button.Parent = MainFrame
@@ -145,7 +145,7 @@ buttonFadeEffect(shop1Button)
 
 -- Create button for Hospital 3rd Floor
 local hospital3rdFloorButton = Instance.new("TextButton")
-hospital3rdFloorButton.Text = "Teleport to Hospital 3rd Floor"
+hospital3rdFloorButton.Text = "tpHospital 3rd Floor"
 hospital3rdFloorButton.Size = buttonSize
 hospital3rdFloorButton.Position = UDim2.new(0, 10, 0, 180)
 hospital3rdFloorButton.Parent = MainFrame
@@ -156,7 +156,7 @@ buttonFadeEffect(hospital3rdFloorButton)
 
 -- Create button for Hospital 1st Floor
 local hospital1stFloorButton = Instance.new("TextButton")
-hospital1stFloorButton.Text = "Teleport to Hospital 1st Floor"
+hospital1stFloorButton.Text = "tpHospital 1st Floor"
 hospital1stFloorButton.Size = buttonSize
 hospital1stFloorButton.Position = UDim2.new(0, 180, 0, 180)
 hospital1stFloorButton.Parent = MainFrame
@@ -167,7 +167,7 @@ buttonFadeEffect(hospital1stFloorButton)
 
 -- Create button for Water Tank
 local waterTankButton = Instance.new("TextButton")
-waterTankButton.Text = "Teleport to Water Tank"
+waterTankButton.Text = "TpWater Tank"
 waterTankButton.Size = buttonSize
 waterTankButton.Position = UDim2.new(0, 180, 0, 210)
 waterTankButton.Parent = MainFrame
@@ -212,8 +212,8 @@ local isMinimized = false
 
 -- Minimize/expand button click event
 minimizeExpandButton.MouseButton1Click:Connect(function()
-    isMinimized = not isMinimized
-    if isMinimized then
+    isMinimize = not isMinimize
+    if isMinimize then
         -- Hide buttons
         toggleButtonsVisibility(not isMinimized)
     else
