@@ -61,9 +61,10 @@ ScreenGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
 ScreenGui.ResetOnSpawn = false
 
 -- ตั้งค่า MainFrame
+local MainFrame = Instance.new("Frame")
 MainFrame.Name = "MainFrame"
 MainFrame.Parent = ScreenGui
-MainFrame.BackgroundColor3 = Color3.fromHSV(tick() % 5 / 5, 1, 1) -- สีรุ้ง
+MainFrame.BackgroundColor3 = Color3.fromHSV(tick() % 5 / 5, 1, 1) -- Rainbow color
 MainFrame.Position = UDim2.new(0, 20, 0, 20)
 MainFrame.Size = UDim2.new(0, 350, 0, 250)
 MainFrame.Active = true
@@ -188,7 +189,7 @@ buttonFadeEffect(spawnButton)
 
 -- Function to toggle visibility of buttons
 local function toggleButtonsVisibility(visible)
-    shopButton.Visible = visible
+    workshopButton.Visible = visible
     towerButton.Visible = visible
     miniHouseButton.Visible = visible
     safePlaceButton.Visible = visible
@@ -213,8 +214,13 @@ local isMinimized = false
 minimizeExpandButton.MouseButton1Click:Connect(function()
     isMinimized = not isMinimized
     if isMinimized then
-        -- Set frame background transparency
-        frame.BackgroundTransparency = 1
+        -- Hide buttons
+        toggleButtonsVisibility(false)
+    else
+        -- Show buttons
+        toggleButtonsVisibility(true)
+    end
+end)
         
         -- Set transparency and disable click for all buttons and text except minimize button
         for _, button in ipairs(frame:GetChildren()) do
@@ -288,5 +294,4 @@ RunService.Heartbeat:Connect(function()
     else
         toggleButtonsVisibility(false)
     end
-    uptimeSeconds = uptimeSeconds + 1
 end)
