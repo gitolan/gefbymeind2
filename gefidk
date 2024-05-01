@@ -80,7 +80,7 @@ buttonFadeEffect(minimizeExpandButton)
 local buttonSize = UDim2.new(0, 100, 0, 20)
 
 local teleportWorkshopButton = Instance.new("TextButton")
-teleportWorkshopButton.Text = "Teleport to Workshop"
+teleportWorkshopButton.Text = "shop"
 teleportWorkshopButton.Size = buttonSize
 teleportWorkshopButton.Position = UDim2.new(0, 10, 0, 60)
 teleportWorkshopButton.Parent = frame
@@ -182,12 +182,12 @@ spawnButton.MouseButton1Click:Connect(function()
     teleportCharacterToCFrame(CFrame.new(-66, 0.600000381, -49, 1, 0, 0, 0, 1, 0, 0, 0, 1))
 end)
 buttonFadeEffect(spawnButton)
-createButtonESP(teleportWorkshopButton, Vector3.new(483.749878, 3.25000095, -19.7498322))
+createButtonESP(shopButton, Vector3.new(483.749878, 3.25000095, -19.7498322))
 
 -- Function to toggle visibility of buttons
 local function toggleButtonsVisibility(visible)
     minimizeExpandButton.Visible = visible
-    teleportWorkshopButton.Visible = visible
+    shopButton.Visible = visible
     towerButton.Visible = visible
     miniHouseButton.Visible = visible
     safePlaceButton.Visible = visible
