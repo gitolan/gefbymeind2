@@ -82,8 +82,8 @@ buttonFadeEffect(minimizeExpandButton)
 local buttonSize = UDim2.new(0, 100, 0, 20)
 
 -- Create button for Workshop
-local workshopButton = Instance.new("TextButton")  -- Mengubah nama 
-workshopButton.Text = "Teleport to Workshop"  -- Menguba
+local workshopButton = Instance.new("TextButton")
+workshopButton.Text = "Teleport to Workshop"
 workshopButton.Size = buttonSize
 workshopButton.Position = UDim2.new(0, 10, 0, 60)
 workshopButton.Parent = MainFrame
@@ -183,7 +183,7 @@ spawnButton.Size = buttonSize
 spawnButton.Position = UDim2.new(0, 10, 0, 210)
 spawnButton.Parent = MainFrame
 spawnButton.MouseButton1Click:Connect(function()
-    teleportCharacterToCFrame(CFrame.new(-66, 0.600000381, -49, 1, 0, 0, 0, 1, 0, 0, 0, 1))
+    teleportCharacterToCFrame(CFrame.new(-66, 0.600000381, -49, 1, 0, 0, 0, 0, 1, 0, -1, 0))
 end)
 buttonFadeEffect(spawnButton)
 
@@ -218,59 +218,6 @@ minimizeExpandButton.MouseButton1Click:Connect(function()
         toggleButtonsVisibility(false)
     else
         -- Show buttons
-        toggleButtonsVisibility(true)
-    end
-end)
-        
-        -- Set transparency and disable click for all buttons and text except minimize button
-        for _, button in ipairs(frame:GetChildren()) do
-            if button ~= minimizeExpandButton then
-                if button:IsA("TextButton") then
-                    button.TextTransparency = 1
-                end
-                button.BackgroundTransparency = 1
-                button.Size = UDim2.new(0, 0, 0, 0)
-            end
-        end
-
-        -- Set the visibility of buttons to false
-        minimizeExpandButton.Text = "+"
-    else
-        -- Restore frame background transparency
-        frame.BackgroundTransparency = 0.5
-        
-        -- Restore transparency and enable click for all buttons and text except minimize button
-        for _, button in ipairs(frame:GetChildren()) do
-            if button ~= minimizeExpandButton then
-                if button:IsA("TextButton") then
-                    button.TextTransparency = 0
-                end
-                button.BackgroundTransparency = 0
-                button.Size = UDim2.new(0, 100, 0, 20)
-            end
-        end
-
-        -- Set the visibility of buttons to true
-        minimizeExpandButton.Text = "-"
-    end
-end)
-
--- Button (+) click event to restore buttons and text
-minimizeExpandButton.MouseButton1Click:Connect(function()
-    if isMinimized then
-        -- Restore transparency and enable click for all buttons and text except minimize button
-        for _, button in ipairs(frame:GetChildren()) do
-            if button ~= minimizeExpandButton then
-                if button:IsA("TextButton") then
-                    button.TextTransparency = 0
-                end
-                button.BackgroundTransparency = 0
-                button.Size = UDim2.new(0, 100, 0, 20)
-            end
-        end
-
-        -- Set the visibility of buttons to true
-        isMinimized = false
         toggleButtonsVisibility(true)
     end
 end)
