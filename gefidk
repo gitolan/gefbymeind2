@@ -1,3 +1,16 @@
+local ScreenGui = Instance.new("ScreenGui")
+local MainFrame = Instance.new("Frame")
+local minimizeExpandButton = Instance.new("TextButton")
+local workshopButton = Instance.new("TextButton")
+local towerButton = Instance.new("TextButton")
+local miniHouseButton = Instance.new("TextButton")
+local safePlaceButton = Instance.new("TextButton")
+local secondFloorHouseButton = Instance.new("TextButton")
+local shop1Button = Instance.new("TextButton")
+local hospital1stFloorButton = Instance.new("TextButton")
+local waterTankButton = Instance.new("TextButton")
+local spawnButton = Instance.new("TextButton")
+local uptimeDisplay = Instance.new("TextLabel")
 local Players = game:GetService("Players")
 local RunService = game:GetService("RunService")
 
@@ -64,7 +77,7 @@ ScreenGui.ResetOnSpawn = false
 local MainFrame = Instance.new("Frame")
 MainFrame.Name = "MainFrame"
 MainFrame.Parent = ScreenGui
-MainFrame.BackgroundColor3 = Color3.fromHSV(tick() % 5 / 5, 1, 1) -- Rainbow color
+MainFrame.BackgroundColor3 = Color3.fromHSV(tick() % 5 / 5, 1, 1)
 MainFrame.Position = UDim2.new(0, 20, 0, 20)
 MainFrame.Size = UDim2.new(0, 350, 0, 250)
 MainFrame.Active = true
