@@ -18,6 +18,24 @@ local function buttonFadeEffect(button)
     end)
 end
 
+-- Function to create ESP for a button
+local function createButtonESP(button, cframe)
+    local esp = Instance.new("BillboardGui")
+    esp.AlwaysOnTop = true
+    esp.Size = UDim2.new(1, 0, 1, 0)
+    esp.StudsOffset = Vector3.new(0, 3, 0) -- Adjust the offset as needed
+    esp.Adornee = button
+    local nameLabel = Instance.new("TextLabel")
+    nameLabel.Text = button.Text
+    nameLabel.Font = Enum.Font.SourceSans
+    nameLabel.TextSize = 18
+    nameLabel.TextColor3 = Color3.new(1, 1, 1)
+    nameLabel.BackgroundTransparency = 1
+    nameLabel.Size = UDim2.new(1, 0, 1, 0)
+    nameLabel.Parent = esp
+    esp.Parent = game.CoreGui
+end
+
 -- Function to get current time of day
 local function getTimeOfDay()
     local hour = tonumber(os.date("%H"))
@@ -164,6 +182,7 @@ spawnButton.MouseButton1Click:Connect(function()
     teleportCharacterToCFrame(CFrame.new(-66, 0.600000381, -49, 1, 0, 0, 0, 1, 0, 0, 0, 1))
 end)
 buttonFadeEffect(spawnButton)
+createButtonESP(teleportWorkshopButton, Vector3.new(483.749878, 3.25000095, -19.7498322))
 
 -- Function to toggle visibility of buttons
 local function toggleButtonsVisibility(visible)
@@ -243,6 +262,21 @@ minimizeExpandButton.MouseButton1Click:Connect(function()
             end
         end
     end
+end)
+
+-- Create uptime display
+local uptimeDisplay = Instance.new("TextLabel")
+uptimeDisplay.Text = "Uptime: 00:00:00"
+uptimeDisplay.TextColor3 = Color3.new(1, 1, 1)
+uptimeDisplay.Size = UDim2.new(0, 100, 0, 20)
+uptimeDisplay.Position = UDim2.new(1, -120, 1, -30)
+uptimeDisplay.Parent = frame
+
+-- Update uptime every second
+RunService.Heartbeat:Connect(function()
+    uptimeSeconds = uptimeSeconds + 1
+    local formattedTime = formatTime(uptimeSeconds)
+    uptimeDisplay.Text = "Uptime: " .. formattedTime
 end)
 
 -- Update button visibility and uptime based on time of day every 5 seconds
