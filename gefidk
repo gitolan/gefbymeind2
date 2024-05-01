@@ -45,11 +45,11 @@ local function formatTime(seconds)
 end
 
 -- Create ScreenGui
-local screenGui = Instance.new("ScreenGui")
-screenGui.Name = "MyScreenGui" 
-screenGui.Draggable = true
-screenGui.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
-screenGui.ResetOnSpawn = false
+local ScreenGui = Instance.new("ScreenGui")
+ScreenGui.Name = "MyScreenGui" 
+ScreenGui.Draggable = true
+ScreenGui.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
+ScreenGui.ResetOnSpawn = false
 
 -- Create frame for buttons
 local frame = Instance.new("Frame")
