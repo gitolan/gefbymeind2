@@ -91,7 +91,8 @@ workshopButton.MouseButton1Click:Connect(function()
     teleportCharacterToCFrame(CFrame.new(483.749878, 3.25000095, -19.7498322))
 end)
 buttonFadeEffect(workshopButton)
-createButtonESP(workshopButton, Vector3.new(483.749878, 
+
+createButtonESP(spawn, Vector3.new(-66, 0.600000381, -49, 1, 0, 0, 0, 0, 1, 0, -1, 0))
 
 local towerButton = Instance.new("TextButton")
 towerButton.Text = "Teleport to Tower"
