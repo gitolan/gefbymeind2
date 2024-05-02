@@ -1,16 +1,3 @@
-local ScreenGui = Instance.new("ScreenGui")
-local MainFrame = Instance.new("Frame")
-local minimizeExpandButton = Instance.new("TextButton")
-local workshopButton = Instance.new("TextButton")
-local towerButton = Instance.new("TextButton")
-local miniHouseButton = Instance.new("TextButton")
-local safePlaceButton = Instance.new("TextButton")
-local secondFloorHouseButton = Instance.new("TextButton")
-local shop1Button = Instance.new("TextButton")
-local hospital1stFloorButton = Instance.new("TextButton")
-local waterTankButton = Instance.new("TextButton")
-local spawnButton = Instance.new("TextButton")
-local uptimeDisplay = Instance.new("TextLabel")
 local Players = game:GetService("Players")
 local RunService = game:GetService("RunService")
 
@@ -95,7 +82,6 @@ buttonFadeEffect(minimizeExpandButton)
 local buttonSize = UDim2.new(0, 100, 0, 20)
 
 -- Create button for Workshop
-local workshopButton = Instance.new("TextButton")
 workshopButton.Text = "Teleport to Workshop"
 workshopButton.Size = buttonSize
 workshopButton.Position = UDim2.new(0, 10, 0, 60)
@@ -104,7 +90,7 @@ workshopButton.MouseButton1Click:Connect(function()
     teleportCharacterToCFrame(CFrame.new(483.749878, 3.25000095, -19.7498322))
 end)
 buttonFadeEffect(workshopButton)
-createButtonESP(workshopButton, Vector3.new(483.749878, 3.25000095, -19.7498322))
+createButtonESP(workshopButton, Vector3.new(483.749878, 
 
 local towerButton = Instance.new("TextButton")
 towerButton.Text = "Teleport to Tower"
@@ -225,8 +211,43 @@ local isMinimized = false
 -- Minimize/expand button click event
 minimizeExpandButton.MouseButton1Click:Connect(function()
     isMinimized = not isMinimized
-    toggleButtonsVisibility(not isMinimized)
+    if isMinimized then
+        -- Set frame background transparency
+        MainFrame.BackgroundTransparency = 1
+
+        -- Set transparency and disable click for all buttons and text except minimize button
+        for _, button in ipairs(MainFrame:GetChildren()) do
+            if button ~= minimizeExpandButton then
+                if button:IsA("TextButton") then
+                    button.TextTransparency = 1
+                end
+                button.BackgroundTransparency = 1
+                button.Size = UDim2.new(0, 0, 0, 0)
+            end
+        end
+
+        -- Set the visibility of buttons to false
+        minimizeExpandButton.Text = "+"
+    else
+        -- Restore frame background transparency
+        MainFrame.BackgroundTransparency = 0.5
+
+        -- Restore transparency and enable click for all buttons and text except minimize button
+        for _, button in ipairs(MainFrame:GetChildren()) do
+            if button ~= minimizeExpandButton then
+                if button:IsA("TextButton") then
+                    button.TextTransparency = 0
+                end
+                button.BackgroundTransparency = 0
+                button.Size = UDim2.new(0, 100, 0, 20)
+            end
+        end
+
+        -- Set the visibility of buttons to true
+        minimizeExpandButton.Text = "-"
+    end
 end)
+
 
 -- Create uptime display
 local uptimeDisplay = Instance.new("TextLabel")
@@ -251,4 +272,5 @@ RunService.Heartbeat:Connect(function()
     else
         toggleButtonsVisibility(false)
     end
+    uptimeSeconds = uptimeSeconds + 1
 end)
