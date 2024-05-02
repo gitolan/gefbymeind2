@@ -98,7 +98,7 @@ local buttonSize = UDim2.new(0, 100, 0, 20)
 
 -- Create button for Workshop
 local workshopButton = Instance.new("TextButton")
-workshopButton.Text = "Teleport to Workshop"
+workshopButton.Text = "TpWorkshop"
 workshopButton.Size = buttonSize
 workshopButton.Position = UDim2.new(0, 10, 0, 60)
 workshopButton.Parent = MainFrame
@@ -110,7 +110,7 @@ buttonFadeEffect(workshopButton)
 createButtonESP(spawn, Vector3.new(-66, 0.600000381, -49, 1, 0, 0, 0, 0, 1, 0, -1, 0))
 
 local towerButton = Instance.new("TextButton")
-towerButton.Text = "Teleport to Tower"
+towerButton.Text = "TpTower"
 towerButton.Size = buttonSize
 towerButton.Position = UDim2.new(0, 10, 0, 90)
 towerButton.Parent = MainFrame
@@ -120,7 +120,7 @@ end)
 buttonFadeEffect(towerButton)
 
 local miniHouseButton = Instance.new("TextButton")
-miniHouseButton.Text = "tpMini House"
+miniHouseButton.Text = "TpMini House"
 miniHouseButton.Size = buttonSize
 miniHouseButton.Position = UDim2.new(0, 10, 0, 120)
 miniHouseButton.Parent = MainFrame
