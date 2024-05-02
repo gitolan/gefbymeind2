@@ -200,7 +200,13 @@ local function toggleButtonsVisibility(visible)
 end
 
 -- Set the initial visibility of buttons
-toggleButtonsVisibility(false)
+local function toggleButtonsVisibility(visible)
+    for _, button in ipairs(MainFrame:GetChildren()) do
+        if button ~= minimizeExpandButton then
+            button.Visible = visible
+        end
+    end
+end
 
 -- Variable to store uptime in seconds
 local uptimeSeconds = 0
