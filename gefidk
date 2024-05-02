@@ -91,6 +91,7 @@ minimizeExpandButton.Text = "_"
 minimizeExpandButton.Size = UDim2.new(0, 20, 0, 20)
 minimizeExpandButton.Position = UDim2.new(1, -45, 0, 25)
 minimizeExpandButton.Parent = MainFrame
+minimizeExpandButton.MouseButton1Click:Connect(function()
 buttonFadeEffect(minimizeExpandButton)
 
 -- Create teleport buttons with small size
@@ -243,7 +244,7 @@ end
 
 -- Variable to track the status of minimize button
 local isMinimized = false
-minimizeButton.MouseButton1Click:Connect(function()
+minimizeExpandButton.MouseButton1Click:Connect(function()
     isMinimized = not isMinimized
     ToggleFrame()
     if isMinimized then
