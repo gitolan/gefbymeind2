@@ -82,6 +82,7 @@ buttonFadeEffect(minimizeExpandButton)
 local buttonSize = UDim2.new(0, 100, 0, 20)
 
 -- Create button for Workshop
+local workshopButton = Instance.new("TextButton")
 workshopButton.Text = "Teleport to Workshop"
 workshopButton.Size = buttonSize
 workshopButton.Position = UDim2.new(0, 10, 0, 60)
