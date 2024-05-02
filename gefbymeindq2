@@ -163,7 +163,6 @@ local function toggleButtonsVisibility(visible)
     spawnButton.Visible = visible
     if visible then
     end
-end
 
 -- Set the initial visibility of buttons
 toggleButtonsVisibility(false)
