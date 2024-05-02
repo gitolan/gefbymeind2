@@ -202,56 +202,45 @@ local function toggleButtonsVisibility(visible)
     spawnButton.Visible = visible
 end
 
+local function ToggleFrame()
+    MainFrame.Visible = not MainFrame.Visible
+end
+
+local function ToggleButtons()
+    if isMinimized then
+        ToggleElements(true)
+    else
+        ToggleElements(false)
+    end
+end
 
 -- Variable to store uptime in seconds
 local uptimeSeconds = 0
 
+local function ToggleFrame()
+    MainFrame.Visible = not isMinimized
+    if isMinimized then
+        MainFrame.BackgroundTransparency = 1 -- Mengatur transparansi menjadi 100% untuk membuatnya tidak terlihat
+    else
+        MainFrame.BackgroundTransparency = 0.5
+    end
+end
+
 -- Variable to track the status of minimize button
 local isMinimized = false
-
--- Minimize/expand button click event
-minimizeExpandButton.MouseButton1Click:Connect(function()
+minimizeButton.MouseButton1Click:Connect(function()
     isMinimized = not isMinimized
+    ToggleFrame()
     if isMinimized then
-        -- Set frame background transparency
         MainFrame.BackgroundTransparency = 1
-
-        -- Set transparency and disable click for all buttons and text except minimize button
-        for _, button in ipairs(MainFrame:GetChildren()) do
-            if button ~= minimizeExpandButton then
-                if button:IsA("TextButton") then
-                    button.TextTransparency = 1
-                end
-                button.BackgroundTransparency = 1
-                button.Size = UDim2.new(0, 0, 0, 0)
-                button.Visible = false
-            end
-        end
-
-        -- Set the visibility of buttons to false
-        minimizeExpandButton.Text = "+"
+        ToggleElements(true) -- o
+        minimizeButton.Visible = false -- l
     else
-        -- Restore frame background transparency
         MainFrame.BackgroundTransparency = 0.5
-
-        -- Restore transparency and enable click for all buttons and text except minimize button
-        for _, button in ipairs(MainFrame:GetChildren()) do
-            if button ~= minimizeExpandButton then
-                if button:IsA("TextButton") then
-                    button.TextTransparency = 0
-                end
-                button.BackgroundTransparency = 0
-                button.Size = UDim2.new(0, 100, 0, 20)
-                button.Visible = true
-            end
-        end
-
-        -- Set the visibility of buttons to true
-        minimizeExpandButton.Text = "-"
+        ToggleElements(false) -- p
+        minimizeButton.Visible = h
     end
 end)
-
-
 
 -- Create uptime display
 local uptimeDisplay = Instance.new("TextLabel")
