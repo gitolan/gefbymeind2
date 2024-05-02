@@ -190,6 +190,7 @@ buttonFadeEffect(spawnButton)
 
 -- Function to toggle visibility of buttons
 local function toggleButtonsVisibility(visible)
+    minimizeExpandButton.Visible = visible
     workshopButton.Visible = visible
     towerButton.Visible = visible
     miniHouseButton.Visible = visible
@@ -200,6 +201,7 @@ local function toggleButtonsVisibility(visible)
     waterTankButton.Visible = visible
     spawnButton.Visible = visible
 end
+
 
 -- Variable to store uptime in seconds
 local uptimeSeconds = 0
@@ -222,6 +224,7 @@ minimizeExpandButton.MouseButton1Click:Connect(function()
                 end
                 button.BackgroundTransparency = 1
                 button.Size = UDim2.new(0, 0, 0, 0)
+                button.Visible = false
             end
         end
 
@@ -239,6 +242,7 @@ minimizeExpandButton.MouseButton1Click:Connect(function()
                 end
                 button.BackgroundTransparency = 0
                 button.Size = UDim2.new(0, 100, 0, 20)
+                button.Visible = true
             end
         end
 
@@ -246,6 +250,7 @@ minimizeExpandButton.MouseButton1Click:Connect(function()
         minimizeExpandButton.Text = "-"
     end
 end)
+
 
 
 -- Create uptime display
@@ -261,15 +266,4 @@ RunService.Heartbeat:Connect(function()
     uptimeSeconds = uptimeSeconds + 1
     local formattedTime = formatTime(uptimeSeconds)
     uptimeDisplay.Text = "Uptime: " .. formattedTime
-end)
-
--- Update button visibility and uptime based on time of day every 5 seconds
-RunService.Heartbeat:Connect(function()
-    local timeOfDay = getTimeOfDay()
-    if timeOfDay == "Day" then
-        toggleButtonsVisibility(true)
-    else
-        toggleButtonsVisibility(false)
-    end
-    uptimeSeconds = uptimeSeconds + 1
 end)
