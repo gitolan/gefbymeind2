@@ -90,7 +90,7 @@ local minimizeExpandButton = Instance.new("TextButton")
 minimizeExpandButton.Text = "_"
 minimizeExpandButton.Size = UDim2.new(0, 20, 0, 20)
 minimizeExpandButton.Position = UDim2.new(1, -45, 0, 25)
-minimizeExpandButton.Parent = MainFrame
+minimizeExpandButton.Parent = ScreenGui
 minimizeExpandButton.MouseButton1Click:Connect(function()
 buttonFadeEffect(minimizeExpandButton)
 
@@ -236,9 +236,11 @@ local uptimeSeconds = 0
 local function ToggleFrame()
     MainFrame.Visible = not isMinimized
     if isMinimized then
-        MainFrame.BackgroundTransparency = 1 -- Mengatur transparansi menjadi 100% untuk membuatnya tidak terlihat
+        MainFrame.BackgroundTransparency = 1
+        MainFrame.Visible = visible
     else
         MainFrame.BackgroundTransparency = 0.5
+        MainFrame.Visible = visible
     end
 end
 
@@ -249,12 +251,10 @@ minimizeExpandButton.MouseButton1Click:Connect(function()
     ToggleFrame()
     if isMinimized then
         MainFrame.BackgroundTransparency = 1
-        ToggleElements(true) -- o
-        minimizeButton.Visible = false -- l
+        ToggleElements(true)
     else
-        MainFrame.BackgroundTransparency = 0.5
-        ToggleElements(false) -- p
-        minimizeButton.Visible = h
+        MainFrame.BackGrkundTransparency = 0.7
+        ToggleElements(false)
     end
 end)
 
