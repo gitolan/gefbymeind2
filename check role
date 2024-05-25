@@ -1,0 +1,77 @@
+-- Function to handle new roles and copy to clipboard
+local function handleNewRoles(newRoles)
+    -- Create a prompt UI
+    local prompt = Instance.new("ScreenGui")
+    prompt.ResetOnSpawn = false
+    prompt.Parent = player:WaitForChild("PlayerGui")
+
+    local frame = Instance.new("Frame")
+    frame.Size = UDim2.new(0, 300, 0, 150)
+    frame.Position = UDim2.new(0.5, -150, 0.5, -75)
+    frame.BackgroundTransparency = 0.5
+    frame.BackgroundColor3 = Color3.new(0, 0, 0)
+    frame.Parent = prompt
+
+    local label = Instance.new("TextLabel")
+    label.Size = UDim2.new(1, 0, 0.5, 0)
+    label.Position = UDim2.new(0, 0, 0, 0)
+    label.Text = "New role detected! Copy to clipboard?"
+    label.TextScaled = true
+    label.TextColor3 = Color3.new(1, 1, 1)
+    label.BackgroundTransparency = 1
+    label.Parent = frame
+
+    local yesButton = Instance.new("TextButton")
+    yesButton.Size = UDim2.new(0.4, 0, 0.3, 0)
+    yesButton.Position = UDim2.new(0.1, 0, 0.6, 0)
+    yesButton.Text = "Yes"
+    yesButton.TextScaled = true
+    yesButton.TextColor3 = Color3.new(1, 1, 1)
+    yesButton.BackgroundColor3 = Color3.new(0, 0.5, 0)
+    yesButton.Parent = frame
+
+    local noButton = Instance.new("TextButton")
+    noButton.Size = UDim2.new(0.4, 0, 0.3, 0)
+    noButton.Position = UDim2.new(0.5, 0, 0.6, 0)
+    noButton.Text = "No"
+    noButton.TextScaled = true
+    noButton.TextColor3 = Color3.new(1, 1, 1)
+    noButton.BackgroundColor3 = Color3.new(0.5, 0, 0)
+    noButton.Parent = frame
+
+    local function copyToClipboard()
+        local rolesText = table.concat(newRoles, ", ")
+        setclipboard(rolesText) -- Copy to clipboard
+        prompt:Destroy()
+    end
+
+    yesButton.MouseButton1Click:Connect(copyToClipboard)
+    noButton.MouseButton1Click:Connect(function() prompt:Destroy() end)
+end
+
+-- Function to update roles and handle new roles
+local existingRoles = {}
+
+local function updateRoles()
+    local newRoles = {}
+    for _, otherPlayer in ipairs(Players:GetPlayers()) do
+        if otherPlayer ~= player and otherPlayer:FindFirstChild("PlayerRole") then
+            local role = otherPlayer.PlayerRole.Value
+            if role ~= "Dead" and not existingRoles[role] then
+                table.insert(newRoles, role)
+                existingRoles[role] = true
+            end
+        end
+    end
+
+    if #newRoles > 0 then
+        handleNewRoles(newRoles)
+    end
+end
+
+-- Call updateRoles whenever needed, e.g., on player added or role change
+Players.PlayerAdded:Connect(updateRoles)
+for _, otherPlayer in ipairs(Players:GetPlayers()) do
+    otherPlayer:GetPropertyChangedSignal("PlayerRole"):Connect(updateRoles)
+end
+updateRoles()
