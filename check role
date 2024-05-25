@@ -4,9 +4,9 @@ local Players = game:GetService("Players")
 local player = Players.LocalPlayer
 
 -- Function to create a styled button
-local function createStyledButton(parent, text, position)
+local function createStyledButton(parent, text, position, size)
     local button = Instance.new("TextButton")
-    button.Size = UDim2.new(1, 0, 0.2, 0)
+    button.Size = size or UDim2.new(1, 0, 0.2, 0)
     button.Position = position
     button.Text = text
     button.TextScaled = true
@@ -94,9 +94,11 @@ end
 local function handleRoles()
     local uniqueRoles = collectUniqueRoles()
     if #uniqueRoles > 0 then
-        local roleOptions = Instance.new("Frame")
+        local roleOptions = Instance.new("ScrollingFrame")
         roleOptions.Size = UDim2.new(0, 150, 0, 200)
         roleOptions.Position = UDim2.new(0.5, -75, 0.5, -100)
+        roleOptions.CanvasSize = UDim2.new(0, 0, 0, #uniqueRoles * 50 + 50)
+        roleOptions.ScrollBarThickness = 8
         roleOptions.BackgroundTransparency = 0.5
         roleOptions.BackgroundColor3 = Color3.new(0, 0, 0)
         roleOptions.Parent = screenGui
