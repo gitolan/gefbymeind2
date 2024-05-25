@@ -64,7 +64,7 @@ loadstring(game:HttpGet("https://raw.githubusercontent.com/gitolan/gefop-/main/c
 animateButton(teleportButton)
 animateButton(teleportAndCreateBlockButton)
 animateButton(refreshTeleportButton)
-animateButton(createEspButton)
+animateButton(createHighlightButton)
 
 local initialPosition
 local isTeleported = false
@@ -73,16 +73,18 @@ local createdBlocks = 0
 local maxBlocks = 2
 local hitboxCount = 0
 local maxHitboxes = 2
+local activeHitboxes = {}
 
 local function addHitbox(playerCharacter)
     local humanoidRootPart = playerCharacter:FindFirstChild("HumanoidRootPart")
     local torso = playerCharacter:FindFirstChild("Torso") or playerCharacter:FindFirstChild("TorsoPart")
     if humanoidRootPart and torso then
         while hitboxCount >= maxHitboxes do
-            for _, child in ipairs(humanoidRootPart:GetChildren()) do
-                if child.Name == "Hitbox" and child:IsA("Part") then
-                    child:Destroy()
+            for _, hitbox in ipairs(activeHitboxes) do
+                if hitbox and hitbox:IsA("Part") then
+                    hitbox:Destroy()
                     hitboxCount = hitboxCount - 1
+                    table.remove(activeHitboxes, 1)
                     if hitboxCount < maxHitboxes then break end
                 end
             end
@@ -95,15 +97,25 @@ local function addHitbox(playerCharacter)
         hitbox.Name = "Hitbox"
         hitbox.Parent = torso
         hitbox.CFrame = humanoidRootPart.CFrame
-
-        game:GetService("RunService").Heartbeat:Connect(function()
-            if humanoidRootPart and hitbox then
-                hitbox.CFrame = humanoidRootPart.CFrame
-            end
-        end)
+        table.insert(activeHitboxes, hitbox)
         hitboxCount = hitboxCount + 1
     end
 end
+
+local function updateHitboxes()
+    game:GetService("RunService").Heartbeat:Connect(function()
+        for _, hitbox in ipairs(activeHitboxes) do
+            if hitbox and hitbox.Parent and hitbox.Parent.Parent then
+                local humanoidRootPart = hitbox.Parent.Parent:FindFirstChild("HumanoidRootPart")
+                if humanoidRootPart then
+                    hitbox.CFrame = humanoidRootPart.CFrame
+                end
+            end
+        end
+    end)
+end
+
+updateHitboxes()
 
 local function teleportToPlayer(targetPlayer)
     initialPosition = player.Character.PrimaryPart.Position
@@ -116,7 +128,7 @@ end
 
 local function findNextPlayer()
     local playerRole = player:FindFirstChild("PlayerRole") and player.PlayerRole.Value or nil
-q    for _, otherPlayer in ipairs(Players:GetPlayers()) do
+    for _, otherPlayer in ipairs(Players:GetPlayers()) do
         if otherPlayer ~= player and otherPlayer ~= lastTeleportedPlayer and otherPlayer:FindFirstChild("PlayerRole") then
             local otherPlayerRole = otherPlayer.PlayerRole.Value
             if (otherPlayerRole == "Crown" or otherPlayerRole == "Runner" or otherPlayerRole == "Survivor" or otherPlayerRole == "Juggernaut" or otherPlayerRole == "B/FreezeRunner") or
