@@ -3,7 +3,7 @@ local player = Players.LocalPlayer
 
 local function createStyledButton(parent, text, position)
     local button = Instance.new("TextButton")
-    button.Size = UDim2.new(1, 0, 0.25, 0) -- Memperbesar ukuran tombol sedikit
+    button.Size = UDim2.new(1, 0, 0.2, 0)
     button.Position = position
     button.Text = text
     button.TextScaled = true
@@ -32,22 +32,36 @@ local function createStyledButton(parent, text, position)
     return button
 end
 
+local function animateButton(button)
+    local tweenService = game:GetService("TweenService")
+    local goal = {BackgroundColor3 = Color3.new(0.3, 0.3, 0.3)}
+    local tweenInfo = TweenInfo.new(0.2, Enum.EasingStyle.Quad, Enum.EasingDirection.Out, 0, true)
+    local tween = tweenService:Create(button, tweenInfo, goal)
+    button.MouseButton1Click:Connect(function()
+        tween:Play()
+    end)
+end
+
 local screenGui = Instance.new("ScreenGui")
 screenGui.ResetOnSpawn = false
 screenGui.Parent = player:WaitForChild("PlayerGui")
 
 local frame = Instance.new("Frame")
-frame.Size = UDim2.new(0, 150, 0, 160) -- Memperbesar tinggi frame untuk mengakomodasi tombol yang lebih besar
+frame.Size = UDim2.new(0, 150, 0, 160)
 frame.Position = UDim2.new(0, 10, 0, 10)
 frame.BackgroundTransparency = 1
 frame.Parent = screenGui
 
-local buttonSpacing = 0.27 -- Menyesuaikan jarak antar tombol
-local teleportButton = createStyledButton(frame, "Teleport Back", UDim2.new(0, 0, 0 * buttonSpacing, 0))
+local buttonSpacing = 0.25
+local teleportButton = createStyledButton(frame, "Teleport / Back (B/FreezeRunner)", UDim2.new(0, 0, 0 * buttonSpacing, 0))
 local teleportAndCreateBlockButton = createStyledButton(frame, "Teleport & Create Blocks", UDim2.new(0, 0, 1 * buttonSpacing, 0))
 local refreshTeleportButton = createStyledButton(frame, "Refresh Teleport", UDim2.new(0, 0, 2 * buttonSpacing, 0))
+local createHighlightButton = createStyledButton(frame, "Create Highlight", UDim2.new(0, 0, 3 * buttonSpacing, 0))
 
-loadstring(game:HttpGet("https://raw.githubusercontent.com/gitolan/gefop-/main/creditgef.txt"))()
+animateButton(teleportButton)
+animateButton(teleportAndCreateBlockButton)
+animateButton(refreshTeleportButton)
+animateButton(createHighlightButton)
 
 local initialPosition
 local isTeleported = false
@@ -61,7 +75,6 @@ local function addHitbox(playerCharacter)
     local humanoidRootPart = playerCharacter:FindFirstChild("HumanoidRootPart")
     local torso = playerCharacter:FindFirstChild("Torso") or playerCharacter:FindFirstChild("TorsoPart")
     if humanoidRootPart and torso then
-        -- Hapus hitbox jika sudah mencapai batas maksimum
         while hitboxCount >= maxHitboxes do
             for _, child in ipairs(humanoidRootPart:GetChildren()) do
                 if child.Name == "Hitbox" and child:IsA("Part") then
@@ -71,7 +84,6 @@ local function addHitbox(playerCharacter)
                 end
             end
         end
-        -- Tambahkan hitbox baru
         local hitbox = Instance.new("Part")
         hitbox.Size = Vector3.new(7, 6, 7)
         hitbox.Transparency = 0.5
@@ -118,7 +130,7 @@ local function toggleTeleport()
         if initialPosition then
             player.Character:SetPrimaryPartCFrame(CFrame.new(initialPosition))
             isTeleported = false
-            teleportButton.Text = "Teleport Back"
+            teleportButton.Text = "Teleport / Back (B/FreezeRunner)"
         end
     else
         local targetPlayer = findNextPlayer()
@@ -144,7 +156,7 @@ local function teleportAndCreateBlock()
         block.Parent = workspace
         createdBlocks = createdBlocks + 1
     else
-        warn("The maximum block that can be created is " .. maxBlocks)
+        warn("Maksimal blok yang dapat dibuat adalah " .. maxBlocks)
     end
 end
 
@@ -157,6 +169,34 @@ local function refreshTeleport()
     end
 end
 
+local function createHighlightForPlayers()
+    for _, otherPlayer in ipairs(Players:GetPlayers()) do
+        if otherPlayer ~= player and otherPlayer:FindFirstChild("PlayerRole") and otherPlayer.PlayerRole.Value ~= "Dead" then
+            local character = otherPlayer.Character
+            if character then
+                local highlight = Instance.new("Highlight")
+                highlight.FillColor = (otherPlayer.PlayerRole.Value == player.PlayerRole.Value) and Color3.new(0, 1, 0) or Color3.new(1, 0, 0)
+                highlight.Parent = character
+                otherPlayer.CharacterRemoving:Connect(function()
+                    highlight:Destroy()
+                end)
+            end
+        end
+    end
+    local notification = Instance.new("TextLabel")
+    notification.Size = UDim2.new(0, 300, 0, 50)
+    notification.Position = UDim2.new(0.5, -150, 0.1, 0)
+    notification.Text = "Highlights Created!"
+    notification.TextScaled = true
+    notification.BackgroundTransparency = 0.5
+    notification.BackgroundColor3 = Color3.new(0, 0, 0)
+    notification.TextColor3 = Color3.new(1, 1, 1)
+    notification.Parent = screenGui
+
+    game:GetService("Debris"):AddItem(notification, 2) -- Menghapus notifikasi setelah 2 detik
+end
+
 teleportButton.MouseButton1Click:Connect(toggleTeleport)
 teleportAndCreateBlockButton.MouseButton1Click:Connect(teleportAndCreateBlock)
 refreshTeleportButton.MouseButton1Click:Connect(refreshTeleport)
+createHighlightButton.MouseButton1Click:Connect(createHighlightForPlayers)
