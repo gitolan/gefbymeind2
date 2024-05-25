@@ -1,0 +1,160 @@
+local Players = game:GetService("Players")
+local player = Players.LocalPlayer
+
+local function createStyledButton(parent, text, position)
+    local button = Instance.new("TextButton")
+    button.Size = UDim2.new(1, 0, 0.25, 0) -- Memperbesar ukuran tombol sedikit
+    button.Position = position
+    button.Text = text
+    button.TextScaled = true
+    button.Font = Enum.Font.SourceSansSemibold
+    button.TextColor3 = Color3.new(1, 1, 1)
+    button.BackgroundColor3 = Color3.new(0.5, 0.5, 0.5)
+    button.BackgroundTransparency = 0.5
+
+    local corner = Instance.new("UICorner")
+    corner.CornerRadius = UDim.new(0.25, 0)
+    corner.Parent = button
+
+    local blurLayer = Instance.new("Frame")
+    blurLayer.Size = UDim2.new(1, 0, 1, 0)
+    blurLayer.BackgroundColor3 = Color3.new(0.5, 0.5, 0.5)
+    blurLayer.BackgroundTransparency = 0.8
+    blurLayer.ZIndex = button.ZIndex - 1
+    blurLayer.Parent = button
+
+    local cornerBlur = Instance.new("UICorner")
+    cornerBlur.CornerRadius = UDim.new(0.25, 0)
+    cornerBlur.Parent = blurLayer
+
+    button.Parent = parent
+
+    return button
+end
+
+local screenGui = Instance.new("ScreenGui")
+screenGui.ResetOnSpawn = false
+screenGui.Parent = player:WaitForChild("PlayerGui")
+
+local frame = Instance.new("Frame")
+frame.Size = UDim2.new(0, 150, 0, 160) -- Memperbesar tinggi frame untuk mengakomodasi tombol yang lebih besar
+frame.Position = UDim2.new(0, 10, 0, 10)
+frame.BackgroundTransparency = 1
+frame.Parent = screenGui
+
+local buttonSpacing = 0.27 -- Menyesuaikan jarak antar tombol
+local teleportButton = createStyledButton(frame, "Teleport Back", UDim2.new(0, 0, 0 * buttonSpacing, 0))
+local teleportAndCreateBlockButton = createStyledButton(frame, "Teleport & Create Blocks", UDim2.new(0, 0, 1 * buttonSpacing, 0))
+local refreshTeleportButton = createStyledButton(frame, "Refresh Teleport", UDim2.new(0, 0, 2 * buttonSpacing, 0))
+
+local initialPosition
+local isTeleported = false
+local lastTeleportedPlayer
+local createdBlocks = 0
+local maxBlocks = 2
+local hitboxCount = 0
+local maxHitboxes = 2
+
+local function addHitbox(playerCharacter)
+    local humanoidRootPart = playerCharacter:FindFirstChild("HumanoidRootPart")
+    local torso = playerCharacter:FindFirstChild("Torso") or playerCharacter:FindFirstChild("TorsoPart")
+    if humanoidRootPart and torso then
+        -- Hapus hitbox jika sudah mencapai batas maksimum
+        while hitboxCount >= maxHitboxes do
+            for _, child in ipairs(humanoidRootPart:GetChildren()) do
+                if child.Name == "Hitbox" and child:IsA("Part") then
+                    child:Destroy()
+                    hitboxCount = hitboxCount - 1
+                    if hitboxCount < maxHitboxes then break end
+                end
+            end
+        end
+        -- Tambahkan hitbox baru
+        local hitbox = Instance.new("Part")
+        hitbox.Size = Vector3.new(7, 6, 7)
+        hitbox.Transparency = 0.5
+        hitbox.Anchored = false
+        hitbox.CanCollide = false
+        hitbox.Name = "Hitbox"
+        hitbox.Parent = torso
+        hitbox.CFrame = humanoidRootPart.CFrame
+
+        game:GetService("RunService").Heartbeat:Connect(function()
+            if humanoidRootPart and hitbox then
+                hitbox.CFrame = humanoidRootPart.CFrame
+            end
+        end)
+        hitboxCount = hitboxCount + 1
+    end
+end
+
+local function teleportToPlayer(targetPlayer)
+    initialPosition = player.Character.PrimaryPart.Position
+    player.Character:SetPrimaryPartCFrame(targetPlayer.Character.PrimaryPart.CFrame)
+    addHitbox(targetPlayer.Character)
+    isTeleported = true
+    teleportButton.Text = "Return to Starting Position"
+    lastTeleportedPlayer = targetPlayer
+end
+
+local function findNextPlayer()
+    local playerRole = player:FindFirstChild("PlayerRole") and player.PlayerRole.Value or nil
+    for _, otherPlayer in ipairs(Players:GetPlayers()) do
+        if otherPlayer ~= player and otherPlayer ~= lastTeleportedPlayer and otherPlayer:FindFirstChild("PlayerRole") then
+            local otherPlayerRole = otherPlayer.PlayerRole.Value
+            if (otherPlayerRole == "Crown" or otherPlayerRole == "Runner" or otherPlayerRole == "Survivor" or otherPlayerRole == "Juggernaut" or otherPlayerRole == "B/FreezeRunner") or
+               (playerRole == "RedTeam" and otherPlayerRole == "BlueTeam") or (playerRole == "BlueTeam" and otherPlayerRole == "RedTeam") then
+                return otherPlayer
+            end
+        end
+    end
+    return nil
+end
+
+local function toggleTeleport()
+    if isTeleported then
+        if initialPosition then
+            player.Character:SetPrimaryPartCFrame(CFrame.new(initialPosition))
+            isTeleported = false
+            teleportButton.Text = "Teleport Back"
+        end
+    else
+        local targetPlayer = findNextPlayer()
+        if targetPlayer then
+            teleportToPlayer(targetPlayer)
+        end
+    end
+end
+
+local function teleportAndCreateBlock()
+    if createdBlocks < maxBlocks then
+        initialPosition = player.Character.PrimaryPart.Position
+        player.Character:SetPrimaryPartCFrame(CFrame.new(0, 400, 0))
+        isTeleported = true
+        teleportButton.Text = "Return to Starting Position"
+        local block = Instance.new("Part")
+        block.Size = Vector3.new(200, 3, 200)
+        block.Position = Vector3.new(0, 397, 0)
+        block.Anchored = true
+        block.Material = Enum.Material.Plastic
+        block.Color = Color3.new(1, 1, 1)
+        block.Transparency = 0.9
+        block.Parent = workspace
+        createdBlocks = createdBlocks + 1
+    else
+        warn("The maximum block that can be created is " .. maxBlocks)
+    end
+end
+
+local function refreshTeleport()
+    if isTeleported then
+        local targetPlayer = findNextPlayer()
+        if targetPlayer then
+            teleportToPlayer(targetPlayer)
+        end
+    end
+end
+
+teleportButton.MouseButton1Click:Connect(toggleTeleport)
+teleportAndCreateBlockButton.MouseButton1Click:Connect(teleportAndCreateBlock)
+refreshTeleportButton.MouseButton1Click:Connect(refreshTeleport)
