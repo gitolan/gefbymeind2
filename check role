@@ -1,77 +1,183 @@
--- Function to handle new roles and copy to clipboard
-local function handleNewRoles(newRoles)
-    -- Create a prompt UI
-    local prompt = Instance.new("ScreenGui")
-    prompt.ResetOnSpawn = false
-    prompt.Parent = player:WaitForChild("PlayerGui")
+-- File path: /path/to/your/script.lua
 
-    local frame = Instance.new("Frame")
-    frame.Size = UDim2.new(0, 300, 0, 150)
-    frame.Position = UDim2.new(0.5, -150, 0.5, -75)
-    frame.BackgroundTransparency = 0.5
-    frame.BackgroundColor3 = Color3.new(0, 0, 0)
-    frame.Parent = prompt
+local Players = game:GetService("Players")
+local player = Players.LocalPlayer
 
-    local label = Instance.new("TextLabel")
-    label.Size = UDim2.new(1, 0, 0.5, 0)
-    label.Position = UDim2.new(0, 0, 0, 0)
-    label.Text = "New role detected! Copy to clipboard?"
-    label.TextScaled = true
-    label.TextColor3 = Color3.new(1, 1, 1)
-    label.BackgroundTransparency = 1
-    label.Parent = frame
+-- Function to create a styled button
+local function createStyledButton(parent, text, position)
+    local button = Instance.new("TextButton")
+    button.Size = UDim2.new(1, 0, 0.2, 0)
+    button.Position = position
+    button.Text = text
+    button.TextScaled = true
+    button.Font = Enum.Font.SourceSansSemibold
+    button.TextColor3 = Color3.new(1, 1, 1)
+    button.BackgroundColor3 = Color3.new(0.5, 0.5, 0.5)
+    button.BackgroundTransparency = 0.5
 
-    local yesButton = Instance.new("TextButton")
-    yesButton.Size = UDim2.new(0.4, 0, 0.3, 0)
-    yesButton.Position = UDim2.new(0.1, 0, 0.6, 0)
-    yesButton.Text = "Yes"
-    yesButton.TextScaled = true
-    yesButton.TextColor3 = Color3.new(1, 1, 1)
-    yesButton.BackgroundColor3 = Color3.new(0, 0.5, 0)
-    yesButton.Parent = frame
+    local corner = Instance.new("UICorner")
+    corner.CornerRadius = UDim.new(0.25, 0)
+    corner.Parent = button
 
-    local noButton = Instance.new("TextButton")
-    noButton.Size = UDim2.new(0.4, 0, 0.3, 0)
-    noButton.Position = UDim2.new(0.5, 0, 0.6, 0)
-    noButton.Text = "No"
-    noButton.TextScaled = true
-    noButton.TextColor3 = Color3.new(1, 1, 1)
-    noButton.BackgroundColor3 = Color3.new(0.5, 0, 0)
-    noButton.Parent = frame
+    local blurLayer = Instance.new("Frame")
+    blurLayer.Size = UDim2.new(1, 0, 1, 0)
+    blurLayer.BackgroundColor3 = Color3.new(0.5, 0.5, 0.5)
+    blurLayer.BackgroundTransparency = 0.8
+    blurLayer.ZIndex = button.ZIndex - 1
+    blurLayer.Parent = button
 
-    local function copyToClipboard()
-        local rolesText = table.concat(newRoles, ", ")
-        setclipboard(rolesText) -- Copy to clipboard
-        prompt:Destroy()
-    end
+    local cornerBlur = Instance.new("UICorner")
+    cornerBlur.CornerRadius = UDim.new(0.25, 0)
+    cornerBlur.Parent = blurLayer
 
-    yesButton.MouseButton1Click:Connect(copyToClipboard)
-    noButton.MouseButton1Click:Connect(function() prompt:Destroy() end)
+    button.Parent = parent
+
+    return button
 end
 
--- Function to update roles and handle new roles
-local existingRoles = {}
+-- Function to animate a button
+local function animateButton(button)
+    local tweenService = game:GetService("TweenService")
+    local goal = {BackgroundColor3 = Color3.new(0.3, 0.3, 0.3)}
+    local tweenInfo = TweenInfo.new(0.2, Enum.EasingStyle.Quad, Enum.EasingDirection.Out, 0, true)
+    local tween = tweenService:Create(button, tweenInfo, goal)
+    button.MouseButton1Click:Connect(function()
+        tween:Play()
+    end)
+end
 
-local function updateRoles()
-    local newRoles = {}
+-- Creating the ScreenGui
+local screenGui = Instance.new("ScreenGui")
+screenGui.ResetOnSpawn = false
+screenGui.Parent = player:WaitForChild("PlayerGui")
+
+-- Creating the frame to hold buttons
+local frame = Instance.new("Frame")
+frame.Size = UDim2.new(0, 150, 0, 200)
+frame.Position = UDim2.new(0, 20, 0, 10)  -- Shifted slightly to the right
+frame.BackgroundTransparency = 1
+frame.Parent = screenGui
+
+-- Spacing between buttons
+local buttonSpacing = 0.25
+
+-- Creating buttons
+local checkRolesButton = createStyledButton(frame, "Check and Change Role", UDim2.new(0, 0, 0 * buttonSpacing, 0))
+
+-- Animating buttons
+animateButton(checkRolesButton)
+
+-- Function to collect all unique roles from players, excluding "Dead"
+local function collectUniqueRoles()
+    local roles = {}
+    local roleSet = {}
+
     for _, otherPlayer in ipairs(Players:GetPlayers()) do
-        if otherPlayer ~= player and otherPlayer:FindFirstChild("PlayerRole") then
+        if otherPlayer:FindFirstChild("PlayerRole") then
             local role = otherPlayer.PlayerRole.Value
-            if role ~= "Dead" and not existingRoles[role] then
-                table.insert(newRoles, role)
-                existingRoles[role] = true
+            if role ~= "Dead" and not roleSet[role] then
+                table.insert(roles, role)
+                roleSet[role] = true
             end
         end
     end
 
-    if #newRoles > 0 then
-        handleNewRoles(newRoles)
+    return roles
+end
+
+-- Function to copy text to the clipboard
+local function copyToClipboard(text)
+    setclipboard(text)
+end
+
+-- Function to handle roles logic and change role
+local function handleRoles()
+    local uniqueRoles = collectUniqueRoles()
+    if #uniqueRoles > 0 then
+        local roleOptions = Instance.new("Frame")
+        roleOptions.Size = UDim2.new(0, 150, 0, 200)
+        roleOptions.Position = UDim2.new(0.5, -75, 0.5, -100)
+        roleOptions.BackgroundTransparency = 0.5
+        roleOptions.BackgroundColor3 = Color3.new(0, 0, 0)
+        roleOptions.Parent = screenGui
+
+        local closeButton = createStyledButton(roleOptions, "Close", UDim2.new(0, 0, #uniqueRoles * buttonSpacing, 0))
+        closeButton.MouseButton1Click:Connect(function()
+            roleOptions:Destroy()
+        end)
+
+        for i, role in ipairs(uniqueRoles) do
+            local roleButton = createStyledButton(roleOptions, role, UDim2.new(0, 0, (i-1) * buttonSpacing, 0))
+            local mouseDownTime = 0
+            local holdDuration = 2  -- Duration in seconds to consider as hold
+
+            roleButton.MouseButton1Down:Connect(function()
+                mouseDownTime = tick()
+            end)
+
+            roleButton.MouseButton1Up:Connect(function()
+                local elapsed = tick() - mouseDownTime
+                if elapsed >= holdDuration then
+                    copyToClipboard(role)
+                    local notification = Instance.new("TextLabel")
+                    notification.Size = UDim2.new(0, 300, 0, 50)
+                    notification.Position = UDim2.new(0.5, -150, 0.1, 0)
+                    notification.Text = "Role copied to clipboard!"
+                    notification.TextScaled = true
+                    notification.BackgroundTransparency = 0.5
+                    notification.BackgroundColor3 = Color3.new(0, 0, 0)
+                    notification.TextColor3 = Color3.new(1, 1, 1)
+                    notification.Parent = screenGui
+
+                    game:GetService("Debris"):AddItem(notification, 2)
+                else
+                    if player:FindFirstChild("PlayerRole") then
+                        player.PlayerRole.Value = role
+                        handleNewRole(role)
+                    else
+                        local playerRole = Instance.new("StringValue")
+                        playerRole.Name = "PlayerRole"
+                        playerRole.Value = role
+                        playerRole.Parent = player
+                        handleNewRole(role)
+                    end
+                end
+                roleOptions:Destroy()
+            end)
+
+            animateButton(roleButton)
+        end
+
+        animateButton(closeButton)
+    else
+        local notification = Instance.new("TextLabel")
+        notification.Size = UDim2.new(0, 300, 0, 50)
+        notification.Position = UDim2.new(0.5, -150, 0.1, 0)
+        notification.Text = "No new roles found!"
+        notification.TextScaled = true
+        notification.BackgroundTransparency = 0.5
+        notification.BackgroundColor3 = Color3.new(0, 0, 0)
+        notification.TextColor3 = Color3.new(1, 1, 1)
+        notification.Parent = screenGui
+
+        game:GetService("Debris"):AddItem(notification, 2)
     end
 end
 
--- Call updateRoles whenever needed, e.g., on player added or role change
-Players.PlayerAdded:Connect(updateRoles)
-for _, otherPlayer in ipairs(Players:GetPlayers()) do
-    otherPlayer:GetPropertyChangedSignal("PlayerRole"):Connect(updateRoles)
+-- Function to handle new role and copy roles to clipboard if necessary
+local function handleNewRole(newRole)
+    local notification = Instance.new("TextLabel")
+    notification.Size = UDim2.new(0, 300, 0, 50)
+    notification.Position = UDim2.new(0.5, -150, 0.1, 0)
+    notification.Text = "New role: " .. newRole
+    notification.TextScaled = true
+    notification.BackgroundTransparency = 0.5
+    notification.BackgroundColor3 = Color3.new(0, 0, 0)
+    notification.TextColor3 = Color3.new(1, 1, 1)
+    notification.Parent = screenGui
+
+    game:GetService("Debris"):AddItem(notification, 2)
 end
-updateRoles()
+
+-- Connecting the check roles button to the handler function
+checkRolesButton.MouseButton1Click:Connect(handleRoles)
