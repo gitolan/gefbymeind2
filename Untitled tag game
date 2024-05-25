@@ -53,15 +53,15 @@ frame.BackgroundTransparency = 1
 frame.Parent = screenGui
 
 local buttonSpacing = 0.25
-local teleportButton = createStyledButton(frame, "Teleport / Back (B/FreezeRunner)", UDim2.new(0, 0, 0 * buttonSpacing, 0))
+local teleportButton = createStyledButton(frame, "Teleport Back", UDim2.new(0, 0, 0 * buttonSpacing, 0))
 local teleportAndCreateBlockButton = createStyledButton(frame, "Teleport & Create Blocks", UDim2.new(0, 0, 1 * buttonSpacing, 0))
 local refreshTeleportButton = createStyledButton(frame, "Refresh Teleport", UDim2.new(0, 0, 2 * buttonSpacing, 0))
-local createHighlightButton = createStyledButton(frame, "Create Highlight", UDim2.new(0, 0, 3 * buttonSpacing, 0))
+local createHighlightButton = createStyledButton(frame, "Create Esp", UDim2.new(0, 0, 3 * buttonSpacing, 0))
 
 animateButton(teleportButton)
 animateButton(teleportAndCreateBlockButton)
 animateButton(refreshTeleportButton)
-animateButton(createHighlightButton)
+animateButton(createEspButton)
 
 local initialPosition
 local isTeleported = false
@@ -113,7 +113,7 @@ end
 
 local function findNextPlayer()
     local playerRole = player:FindFirstChild("PlayerRole") and player.PlayerRole.Value or nil
-    for _, otherPlayer in ipairs(Players:GetPlayers()) do
+q    for _, otherPlayer in ipairs(Players:GetPlayers()) do
         if otherPlayer ~= player and otherPlayer ~= lastTeleportedPlayer and otherPlayer:FindFirstChild("PlayerRole") then
             local otherPlayerRole = otherPlayer.PlayerRole.Value
             if (otherPlayerRole == "Crown" or otherPlayerRole == "Runner" or otherPlayerRole == "Survivor" or otherPlayerRole == "Juggernaut" or otherPlayerRole == "B/FreezeRunner") or
@@ -130,7 +130,7 @@ local function toggleTeleport()
         if initialPosition then
             player.Character:SetPrimaryPartCFrame(CFrame.new(initialPosition))
             isTeleported = false
-            teleportButton.Text = "Teleport / Back (B/FreezeRunner)"
+            teleportButton.Text = "Teleport Back"
         end
     else
         local targetPlayer = findNextPlayer()
@@ -156,7 +156,7 @@ local function teleportAndCreateBlock()
         block.Parent = workspace
         createdBlocks = createdBlocks + 1
     else
-        warn("Maksimal blok yang dapat dibuat adalah " .. maxBlocks)
+        warn("The maximum block that can be created is " .. maxBlocks)
     end
 end
 
