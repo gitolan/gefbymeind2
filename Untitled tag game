@@ -214,4 +214,4 @@ end
 teleportButton.MouseButton1Click:Connect(toggleTeleport)
 teleportAndCreateBlockButton.MouseButton1Click:Connect(teleportAndCreateBlock)
 refreshTeleportButton.MouseButton1Click:Connect(refreshTeleport)
-createHighlightButton.MouseButton1Click:Connect(createHighlightForPlayers)
+createEspButton.MouseButton1Click:Connect(createHighlightForPlayers)
