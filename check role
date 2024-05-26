@@ -54,7 +54,7 @@ screenGui.Parent = player:WaitForChild("PlayerGui")
 -- Creating the frame to hold buttons
 local frame = Instance.new("Frame")
 frame.Size = UDim2.new(0, 150, 0, 200)
-frame.Position = UDim2.new(0, 20, 0, 10)  -- Shifted slightly to the right
+frame.Position = UDim2.new(0, 40, 0, 10)  -- Shifted slightly to the right
 frame.BackgroundTransparency = 1
 frame.Parent = screenGui
 
